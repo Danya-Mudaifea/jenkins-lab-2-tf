@@ -19,6 +19,7 @@ pipeline {
       stage("init") {
           steps {
               sh 'make init'
+              sh "make start"
           }
       }
       
