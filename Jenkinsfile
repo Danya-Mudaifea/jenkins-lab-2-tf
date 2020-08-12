@@ -15,17 +15,17 @@ pipeline {
     AWS_PROFILE="kh-labs"
     TF_NAMESPACE="danya"
   }
-  stages {
+    stages {
       stage("init") {
           steps {
-              make init
+              sh 'make init'
           }
       }
       stage("workspace") {
           steps {
               sh """
 terraform workspace select jenkins-lab-2
-if [[ $? -ne 0 ]];
+if [[ \$? -ne 0 ]]; then
   terraform workspace new jenkins-lab-2
 fi
 """
@@ -33,12 +33,12 @@ fi
       }
       stage("plan") {
           steps {
-              make plan
+              sh 'make plan'
           }
       }
       stage("apply") {
           steps {
-              make apply
+              sh 'make apply'
           }
       }
   }
