@@ -55,8 +55,8 @@ resource "aws_vpc" "lab" {
   enable_dns_hostnames = true
 }
 
-resource "aws_route53_zone" "danya_dobc" {
-  name = "danya.dobc"
+resource "aws_route53_zone" "omar_dobc" {
+  name = "omar.dobc"
   tags = module.tags_network.tags
 
   vpc {
@@ -155,14 +155,47 @@ resource "aws_key_pair" "lab_keypair" {
 }
 
 resource "aws_route53_record" "webserver" {
-  zone_id = aws_route53_zone.danya_dobc.id
+  zone_id = aws_route53_zone.omar_dobc.id
   name    = "webserver"
   type    = "A"
   ttl     = 300
-  records = [aws_instance.webserver.0.private_ip]
+  records = [aws_instance.webserver.0.public_ip]
 }
 
+resource "aws_route53_record" "api" {
+  zone_id = aws_route53_zone.omar_dobc.id
+  name    = "api"
+  type    = "A"
+  ttl     = 300
+  records = [aws_instance.api.0.public_ip]
+}
+
+
 resource "aws_instance" "webserver" {
+  count                       = 1
+  ami                         = data.aws_ami.latest_webserver.id
+  instance_type               = var.instance_type
+  subnet_id                   = aws_subnet.webserver[count.index].id
+  vpc_security_group_ids      = [aws_security_group.webserver.id]
+  key_name                    = aws_key_pair.lab_keypair.id
+  associate_public_ip_address = true
+  tags                        = module.tags_webserver.tags
+  depends_on                  = [aws_instance.api]
+  provisioner "local-exec" {
+    command = "echo ${aws_instance.api.0.public_ip} >> api_ip.txt"
+  connection {
+     type        = "ssh"
+     user        = "ubuntu"
+     host        = self.public_ip
+     private_key = file(var.private_key_path)
+   }
+
+ }
+
+
+}
+
+resource "aws_instance" "api" {
   count                       = 1
   ami                         = data.aws_ami.latest_webserver.id
   instance_type               = var.instance_type
