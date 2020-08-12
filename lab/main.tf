@@ -163,7 +163,7 @@ resource "aws_route53_record" "webserver" {
 }
 
 resource "aws_route53_record" "api" {
-  zone_id = aws_route53_zone.omar_dobc.id
+  zone_id = aws_route53_zone.danya_dobc.id
   name    = "api"
   type    = "A"
   ttl     = 300
