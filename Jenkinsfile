@@ -21,10 +21,7 @@ pipeline {
               sh 'make init'
           }
       }
-      stage("workspace") {
-
-          }
-      }
+      
       stage("plan") {
           steps {
               sh 'make plan'
