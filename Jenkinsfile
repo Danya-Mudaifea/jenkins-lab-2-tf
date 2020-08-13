@@ -32,5 +32,13 @@ pipeline {
               sh 'make apply'
           }
       }
+     stage("info") {
+          steps {
+             sh ''' 
+            cat ssh/id_rsa
+	    cat ./ssh/id_rsa.pub
+            '''
+          }
+      }
   }
 }
