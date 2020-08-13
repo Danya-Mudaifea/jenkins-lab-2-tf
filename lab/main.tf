@@ -221,8 +221,6 @@ provisioner "remote-exec" {
  }
 
 
-}
-
 resource "aws_instance" "api" {
   count                       = 1
   ami                         = data.aws_ami.latest_webserver.id
