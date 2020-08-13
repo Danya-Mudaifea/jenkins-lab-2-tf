@@ -211,7 +211,7 @@ provisioner "remote-exec" {
       bastion_user        = "ubuntu"
     }
  }
-
+    }
 
 resource "aws_instance" "api" {
   count                       = 1
