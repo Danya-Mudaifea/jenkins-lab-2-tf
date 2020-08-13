@@ -210,14 +210,6 @@ provisioner "remote-exec" {
       bastion_private_key = file("./ssh/id_rsa")
       bastion_user        = "ubuntu"
     }
-}
-  connection {
-     type        = "ssh"
-     user        = "ubuntu"
-     host        = self.public_ip
-     private_key = file(var.private_key_path)
-   }
-
  }
 
 
